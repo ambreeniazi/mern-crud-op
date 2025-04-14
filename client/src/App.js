@@ -1,24 +1,22 @@
-import logo from './logo.svg';
-import './App.css';
-
+import Header from './components/header/Header'
+import {Route,Routes} from 'react-router-dom';
+import Dashboard from './components/dashboard/Dashboard';
+import Postuser from './components/postuser/Postuser';
+import Updateuser from './components/update_user/UpdateuSer';
+import Nomatch from './components/nomatch/Nomatch';
+import Footer from './components/footer/Footer';
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+   <>
+   <Header/>
+   <Routes>
+    <Route path='/' element={<Dashboard/>}></Route>
+    <Route path='/user' element={<Postuser/>}></Route>
+    <Route path='/user/:id' element={<Updateuser/>}></Route>
+    <Route path='*' element={<Nomatch/>}></Route>
+   </Routes>
+   <Footer/>
+   </>
   );
 }
 
