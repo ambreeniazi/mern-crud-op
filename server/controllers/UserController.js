@@ -15,6 +15,20 @@ const createUserController = async (req, res) => {
   }
 };
 
+const getAllUsersController = async (req , res)=>{
+  try {
+    const users = await User.find()
+    res.status(201).json({
+      message: "Users fetched successfully",
+      users,
+    })
+  } catch (error) {
+    console.error(" Error while getting user:", error);
+    res.status(500).json({ message: "Failed to get user" });
+  }
+}
+
 module.exports = {
   createUserController,
+  getAllUsersController
 };

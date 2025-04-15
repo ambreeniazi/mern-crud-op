@@ -7,8 +7,10 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-const PostUser = require('./routes/UserRoute');
-app.use("/user", PostUser);
+const postUser = require('./routes/UserRoute');
+const getAllUser = require('./routes/UserRoute');
+app.use("/user", postUser);
+app.use("/user", getAllUser);
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
