@@ -26,9 +26,40 @@ const getAllUsersController = async (req , res)=>{
     console.error(" Error while getting user:", error);
     res.status(500).json({ message: "Failed to get user" });
   }
-}
+};
+const getSingleUserController = async (req , res)=>{
+  try {
+    const userid = req.params.id;
+    const user = await User.findById(userid);
+    
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.status(200).json({
+      message: "Single User fetched successfully",
+      user,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+}  
+
+const  updateUserController = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const user = await User.findByIdAndUpdate(id, req.body, { new: true });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.status(200).json({ user, });
+  } catch (error) {
+    res.send("Failed to updated this user");
+  }
+};
 
 module.exports = {
   createUserController,
-  getAllUsersController
+  getAllUsersController,
+  getSingleUserController,
+  updateUserController
 };

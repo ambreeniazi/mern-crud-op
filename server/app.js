@@ -7,10 +7,16 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-const postUser = require('./routes/UserRoute');
-const getAllUser = require('./routes/UserRoute');
-app.use("/user", postUser);
-app.use("/user", getAllUser);
+// const postUser = require('./routes/UserRoute');
+// const getAllUser = require('./routes/UserRoute');
+// const getSingleUser = require('./routes/UserRoute');
+// const updatedUser = require('./routes/UserRoute');
+const userRoutes = require('./routes/UserRoute');
+app.use("/user", userRoutes);
+// app.use("/user", postUser);
+// app.use("/user", getAllUser);
+// app.use("/user", getSingleUser);
+// app.use("/user", updatedUser);
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {

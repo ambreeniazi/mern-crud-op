@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
   const [users, setUsers]= useState([]);
+  const navigate = useNavigate();
 
   useEffect(()=>{
     const getAllUsers =  async ()=>{
@@ -9,14 +11,16 @@ const Dashboard = () => {
         const res = await fetch("http://localhost:3000/user/getAll-user");
         const data = await res.json();
         setUsers(data?.users);
-        // console.log(data);
       } catch (error) {
         console.log(error.message,"there is an error to fetching all usres")
       }
     }
     getAllUsers();
   },[]);
-
+ 
+  const handleUpdate=(userid)=>{
+    navigate(`/user/${userid}`);
+  }
   return (
      <>
    <div className="container mx-auto p-4">
@@ -27,6 +31,7 @@ const Dashboard = () => {
         <th className="py-2 px-4 border-b">Name</th>
         <th className="py-2 px-4 border-b">Email</th>
         <th className="py-2 px-4 border-b">Phone</th>
+        <th className="py-2 px-4 border-b">Action</th>
       </tr>
     </thead>
     <tbody>
@@ -36,6 +41,8 @@ const Dashboard = () => {
             <td className="py-2 px-4 border-b">{user.name}</td>
             <td className="py-2 px-4 border-b">{user.email}</td>
             <td className="py-2 px-4 border-b">{user.phone}</td>
+            <td className='py-2 px-4 border-b'>
+            <button  onClick={()=>handleUpdate(user._id)} className='rounded-md bg-gray-800 text-white p-1 cursor-pointer hover:bg-gray-600'>update</button></td>
           </tr>
         ))
       ) : (
