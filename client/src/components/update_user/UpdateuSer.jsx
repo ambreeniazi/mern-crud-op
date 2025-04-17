@@ -1,6 +1,7 @@
 import React ,{useState,useEffect}from 'react';
 import { useParams } from 'react-router-dom';
 import {Form} from 'react-bootstrap';
+import {useNavigate} from 'react-router-dom';
 
 const UpdateUser = () => {
   const {id} = useParams();
@@ -9,6 +10,7 @@ const UpdateUser = () => {
       email: "",
       phone: "",
     });
+    const navigate = useNavigate();
 
     const handlInputChange = (e) => {
       const { name, value } = e.target;
@@ -30,11 +32,29 @@ const UpdateUser = () => {
         }
         fetchUser();
       },[id]);
+
+      const handleSubmit = async (e) => {
+        e.preventDefault();
+         try {
+          const response = await fetch(`http://localhost:3000/user/updated-user/${id}`, {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formData),
+          }); 
+          const data = await response.json();
+          console.log(data);
+           navigate("/");
+         } catch (error) {
+          console.log("error",error.message)
+         }
+      }
   return (
     <>
       <div className="mx-auto  max-w-md p-6 rounded-2xl shadow-lg  mt-10">
         <h2 className="text-2xl font-bold mb-4 text-center">Update-User</h2>
-        <Form>
+        <Form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label className="block text-sm mb-1">Name:</label>
             <input

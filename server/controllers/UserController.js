@@ -24,7 +24,7 @@ const getAllUsersController = async (req , res)=>{
     })
   } catch (error) {
     console.error(" Error while getting user:", error);
-    res.status(500).json({ message: "Failed to get user" });
+    res.status(500).json({ message: "Failed to fetched user" });
   }
 };
 const getSingleUserController = async (req , res)=>{
@@ -56,10 +56,26 @@ const  updateUserController = async (req, res) => {
     res.send("Failed to updated this user");
   }
 };
+const  deletedUserController = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findByIdAndDelete(id);
+    if (!user) {
+      return res.status(404).json({ msg: "User not found" });
+    }
+    res.status(200).json({
+      msg: "User deleted successfully",
+      user
+    });
+  } catch (error) {
+    res.send("failed");
+  }
+};
 
 module.exports = {
   createUserController,
   getAllUsersController,
   getSingleUserController,
-  updateUserController
+  updateUserController,
+  deletedUserController
 };

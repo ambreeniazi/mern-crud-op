@@ -5,22 +5,42 @@ const Dashboard = () => {
   const [users, setUsers]= useState([]);
   const navigate = useNavigate();
 
-  useEffect(()=>{
-    const getAllUsers =  async ()=>{
-      try {
-        const res = await fetch("http://localhost:3000/user/getAll-user");
-        const data = await res.json();
-        setUsers(data?.users);
-      } catch (error) {
-        console.log(error.message,"there is an error to fetching all usres")
-      }
+
+  const getAllUsers =  async ()=>{
+    try {
+      const res = await fetch("http://localhost:3000/user/getAll-user");
+      const data = await res.json();
+      setUsers(data?.users);
+    } catch (error) {
+      console.log(error.message,"there is an error to fetching all usres")
     }
+  }
+
+  useEffect(()=>{
     getAllUsers();
   },[]);
  
   const handleUpdate=(userid)=>{
     navigate(`/user/${userid}`);
   }
+  
+  const handleDelete = async(id)=>{
+    const confirm = window.confirm("Are you sure you want to delete this user?");
+    if (!confirm) return;
+   try
+   {const res =await fetch(`http://localhost:3000/user/delete-user/${id}`,{
+        method:"Delete" 
+    })
+    if (res.ok) {
+      console.log("Item deleted successfully");
+      getAllUsers();
+    } else {
+      console.error("Failed to delete item");
+    }
+  } catch (error) {
+    console.error("Error:", error);
+  }
+};
   return (
      <>
    <div className="container mx-auto p-4">
@@ -31,6 +51,7 @@ const Dashboard = () => {
         <th className="py-2 px-4 border-b">Name</th>
         <th className="py-2 px-4 border-b">Email</th>
         <th className="py-2 px-4 border-b">Phone</th>
+        <th className="py-2 px-4 border-b">Action</th>
         <th className="py-2 px-4 border-b">Action</th>
       </tr>
     </thead>
@@ -43,6 +64,7 @@ const Dashboard = () => {
             <td className="py-2 px-4 border-b">{user.phone}</td>
             <td className='py-2 px-4 border-b'>
             <button  onClick={()=>handleUpdate(user._id)} className='rounded-md bg-gray-800 text-white p-1 cursor-pointer hover:bg-gray-600'>update</button></td>
+           <td className='py-2 px-4 border-b'><button  onClick={()=>handleDelete(user._id)} className='rounded-md bg-gray-800 text-white p-1 cursor-pointer hover:bg-red-600'>delete</button></td>
           </tr>
         ))
       ) : (
